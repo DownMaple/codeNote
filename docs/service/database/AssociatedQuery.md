@@ -351,3 +351,4 @@ UNION 操作符用于合并两个或多个 SELECT 语句的结果集。它可以
 
 ## CROSS JOIN 交叉连接
 不带ON子句的CROSS JOIN会产生笛卡尔积，即左表的每一行与右表的每一行配对。如果加上ON子句，则等同于INNER JOIN。
+
