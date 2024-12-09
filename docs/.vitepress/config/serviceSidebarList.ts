@@ -12,5 +12,19 @@ export const serviceSidebarList = {
 				{text: 'rocket实现断点续传', link: '/service/rust/Breakpoint'},
 			]
 		}
+	],
+	'database':[
+		{
+			text: '数据库相关',
+			collapsed: false,
+			link: '/service/database/index'
+		},
+		{
+			text: 'sql',
+			collapsed: false,
+			items: [
+				{text: '关联查询', link: '/service/database/AssociatedQuery'},
+			]
+		}
 	]
 }

@@ -18,6 +18,7 @@ export default {
 		sidebar: {
 			'/web/vue/': webSidebarList.vue,
 			'/service/rust/': serviceSidebarList.rust,
+			'/service/database/': serviceSidebarList.database,
 			'/other/engineering/': otherSidebarList.engineering
 		},
 		outline: {
