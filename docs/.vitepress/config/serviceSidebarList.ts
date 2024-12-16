@@ -11,6 +11,13 @@ export const serviceSidebarList = {
 			items: [
 				{text: 'rocket实现断点续传', link: '/service/rust/Breakpoint'},
 			]
+		},
+		{
+			text: 'Tauri应用',
+			collapsed: false,
+			items: [
+				{text: 'Tauri实现系统托盘', link: '/service/rust/TauriTrayIcon'},
+			]
 		}
 	],
 	'database':[
