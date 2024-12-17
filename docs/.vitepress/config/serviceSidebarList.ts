@@ -6,6 +6,13 @@ export const serviceSidebarList = {
 			link: '/service/rust/index'
 		},
 		{
+			text: 'rust原生',
+			collapsed: false,
+			items: [
+				{text: 'rust获取系统信息', link: '/service/rust/SystemInfo'},
+			]
+		},
+		{
 			text: 'web服务端',
 			collapsed: false,
 			items: [

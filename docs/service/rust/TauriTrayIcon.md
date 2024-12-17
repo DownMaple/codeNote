@@ -125,6 +125,9 @@ let tray_menu = TrayIconBuilder::new()
 需要的基本设置写在了注释里：
 
 ```rust
+use tauri::menu::{Menu, MenuItem};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent};
+use tauri::{App, Manager};
 /*
  * 获取系统托盘菜单
  */

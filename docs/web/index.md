@@ -1,31 +1,5 @@
+---
+prev: false
+next: false
+---
 **前端**
-::: code-group
-
-```js [config.js]
-/**
- * @type {import('vitepress').UserConfig}
- */
-const config = {
-  // ...
-}
-
-export default config
-```
-
-```ts [config.ts]
-import type { UserConfig } from 'vitepress'
-
-const config: UserConfig = {
-  // ...
-}
-
-export default config
-```
-```Java
-let config = { /* ... */ };
-```
-
-```txt
-测试分组
-```
-:::
