@@ -2,6 +2,7 @@ export const navList = [
 	{
 		text: '前端',
 		items: [
+			{ text: 'base', link: '/web/base', activeMatch: '/web/base/' },
 			{ text: 'vue', link: '/web/vue', activeMatch: '/web/vue/' },
 		],
 		activeMatch: '/web/'
@@ -22,5 +23,5 @@ export const navList = [
 		],
 		activeMatch: '/other/'
 	},
-	{text: '日志', link: 'https://github.com/...'}
+	{text: 'GitHub', link: 'https://github.com/DownMaple/code-note'}
 ]

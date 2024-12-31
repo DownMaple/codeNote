@@ -16,6 +16,7 @@ export default {
 		siteTitle: 'Maple的笔记本',
 		nav: navList,
 		sidebar: {
+			'/web/base/': webSidebarList.base,
 			'/web/vue/': webSidebarList.vue,
 			'/service/rust/': serviceSidebarList.rust,
 			'/service/database/': serviceSidebarList.database,
