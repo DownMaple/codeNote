@@ -9,7 +9,7 @@ export const webSidebarList = {
 			text: '浏览器相关',
 			collapsed: false,
 			items: [
-				{text: 'url到页面展示的全过程', link: '/web/base/urlToPage'},
+				{text: 'url到页面展示的全过程', link: '/web/base/Browser/urlToPage'},
 			]
 		}
 	],

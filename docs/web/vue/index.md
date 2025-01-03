@@ -2,4 +2,4 @@
 prev: false
 next: false
 ---
-**精通 vue 的单词拼写**
+**精通 vue 单词的拼写**
