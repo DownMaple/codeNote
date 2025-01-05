@@ -10,10 +10,16 @@ export default {
 	description: 'maple的技术笔记本',
 	cleanUrls: true,
 	lang: 'zh-CN',
-	// 最后更新时间配置
-	lastUpdated: true,
 	themeConfig: {
 		siteTitle: 'Maple的笔记本',
+		// 最后更新时间配置
+		lastUpdated: {
+			text: '文章最后更新时间',
+			formatOptions: {
+				dateStyle: 'full',
+				timeStyle: 'medium'
+			}
+		},
 		nav: navList,
 		sidebar: {
 			'/web/base/': webSidebarList.base,
