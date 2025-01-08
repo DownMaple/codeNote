@@ -2,7 +2,7 @@ export const navList = [
 	{
 		text: '前端',
 		items: [
-			{ text: 'base', link: '/web/base', activeMatch: '/web/base/' },
+			{ text: '基础', link: '/web/base', activeMatch: '/web/base/' },
 			{ text: 'vue', link: '/web/vue', activeMatch: '/web/vue/' },
 		],
 		activeMatch: '/web/'
