@@ -21,6 +21,8 @@
 
 为了不写样式和部分交互，所以直接使用 elementPlus 的上传组件。
 
+暂只支持单文件，多文件可以自行设置实现。
+
 ```vue
 
 <template>
@@ -57,6 +59,14 @@ import {UploadUserFile} from 'element-plus';
 import {FileItemType} from './utils/type.ts';
 import {ref, toRaw} from 'vue';
 
+// 绑定上传文件列表 ，用于在组件展示
+const uploadFileValue = defineModel({
+  type: Array as PropType<UploadUserFile[]>,
+  required: true,
+  default: () => []
+})
+
+
 // 懂的都懂
 const {uploadUrl, testHashUrl, mergeFileUrl, downloadFileUrl, size, fileData} = defineProps({
   uploadUrl: String,        // 上传地址
@@ -74,8 +84,6 @@ const {uploadUrl, testHashUrl, mergeFileUrl, downloadFileUrl, size, fileData} = 
   fileData: Object          // 合并文件的时候附加信息 
 })
 
-
-const uploadFileValue = ref<UploadUserFile[]>([])   // 绑定上传文件列表 ，用于在组件展示
 const fileValue = ref<FileItemType | null>(null)  // 文件信息用于文件操作
 
 function uploadFile(file: UploadUserFile) {
@@ -225,3 +233,445 @@ function calculateHash(chunk) {
 ![An image](/image/web/chunkUpload-file.png)
 
 ## 切片上传
+
+因为要频繁的和ui交互，所以将 切片上传 的逻辑放在 组件文件中，
+
+### 组件中
+
+```ts
+
+function beginUploadFile() {
+  if (fileValue.value && uploadFileValue.value.length > 0) {
+    // 开始上传文件，将文件状态改为上传中
+    fileValue.value.status = 'uploading'
+    uploadFileValue.value[0].status = 'uploading'
+    
+    // 新建 worker 线程， 直接在组件中创建，是因为要 频繁的和 ui 进行交互
+    worker = new Worker(new URL('./utils/uploadFile.worker.js', import.meta.url));
+    
+    // 监听 worker 消息
+    worker.onmessage = function (event) {
+      const {type, message} = event.data;
+      
+      // 根据消息类型，做出处理
+      switch (type) {
+          
+          // 当文件上传成功，将文件状态改为成功，同时将文件的 网络路径 保存到 fileValue 中，用于点击下载
+        case 'success': {
+          if (fileValue.value) {
+            fileValue.value.status = 'success'
+            uploadFileValue.value[0].status = 'success'
+            fileValue.value.pathUrl = event.data.data.pathUrl
+            showSuccess(`文件：${event.data.data.fileName} 上传成功`)   //  注意，这里是简单的 ElementPlus 的提示封装
+            // 源码
+            // /**
+            //  * 成功弹出
+            //  * @param msg
+            //  */
+            // export const showSuccess = (msg: string = "成功") => {
+            //   ElMessage(
+            //       {
+            //         message: msg,
+            //         type: 'success'
+            //       }
+            //   )
+            // }
+          }
+        }
+          break;
+          
+          // 当文件上传失败
+        case 'error': {
+          if (fileValue.value) {
+            fileValue.value.status = 'fail'
+            uploadFileValue.value[0].status = 'fail'
+          } else {
+            showError(message)
+          }
+        }
+          break;
+          
+          // 当文件上传进度发生变化
+        case 'uploadProgress': {
+          updateUploadProgress(event.data)
+        }
+          break;
+          
+          // 当文件名称相同，哈希值不同，则需要更改文件名称上传（名称由服务端返回）
+        case 'updateFileName': {
+          if (fileValue.value) {
+            fileValue.value.name = event.data.data.fileName
+            uploadFileValue.value[0].name = event.data.data.fileName
+          }
+        }
+          break;
+          
+          // 其他
+        default: {
+          console.log(event)
+        }
+      }
+    };
+    
+    // 监听线程错误
+    worker.onerror = function (error) {
+      showError(`Worker error: ${error.message}`);
+    };
+    
+    // 发送文件处理消息，让线程开始工作
+    worker.postMessage(
+        {
+          type: 'generateFile',
+          file: toRaw(fileValue.value),
+          fileData,
+          uploadUrl,
+          testHashUrl,
+          mergeFileUrl
+        });
+  }
+}
+
+```
+
+### worker 中
+
+> [!TIP]
+> 请求 node-express 的文件上传接口时，一定要注意， file 文件 作为最后的参数上传
+
+```js
+self.onmessage = async function (event) {
+  const {type, file, fileDate, uploadUrl, testHashUrl, mergeFileUrl} = event.data;
+  if (type === 'generateFile') {
+    // 文件上传逻辑
+    await uploadFile(file, fileDate, uploadUrl, testHashUrl, mergeFileUrl)
+  } else if (type === 'terminate') {
+    self.postMessage({
+      type: 'error',
+      message: '上传终止'
+    })
+  } else {
+    console.log('Unknown message type:', type);
+  }
+  // 释放线程
+  self.close();
+}
+
+async function uploadFile(file, fileDate, uploadUrl, testHashUrl, mergeFileUrl) {
+  // 先检验文件是否存在，和切片上传状态
+  const testResult = await request(testHashUrl, {
+    fileName: file.name,
+    fileHash: file.fileHash,
+    chunkHash: file.chunks.map(item => item.fileHash)
+  })
+  if (testResult.code === 200) {
+    // 当文件存在，则直接返回文件地址
+    if (testResult.message === '文件已存在') {
+      self.postMessage({
+        type: 'success',
+        message: '文件已存在',
+        data: testResult.data
+      })
+      return
+    } else if (testResult.message === '文件名重复，已修改') {
+      // 当文件同名，但是哈希值不同，则修改文件名，继续上传
+      self.postMessage({
+        type: 'updateFileName',
+        message: '文件名重复，已修改',
+        data: testResult.data
+      })
+      file.name = testResult.data.fileName
+    }
+  } else {
+    // 上传失败
+    self.postMessage({
+      type: 'error',
+      message: '上传失败，请检查网络连接或联系开发人员',
+      error: testResult.error
+    })
+    return
+  }
+  
+  // 根据文件检验结果，获取需要上传的切片
+  const chunksToUpload = testResult.data.length > 0 ? file.chunks.filter(chunk => {
+    return testResult.data.includes(chunk.fileHash)
+  }) : file.chunks
+  
+  // 如果没有需要上传的切片，且文件不存在，则直接合并文件
+  if (chunksToUpload.length === 0) {
+    const mergeRes = await mergeFile(file, mergeFileUrl)
+    if (mergeRes.code === 200) {
+      self.postMessage({
+        type: 'success',
+        message: '文件完成上传',
+        data: mergeRes.data
+      })
+    } else {
+      self.postMessage({
+        type: 'error',
+        message: '文件合并失败'
+      })
+    }
+    return
+  }
+  
+  const uploadRequestList = requestMap(chunksToUpload, file.name, file.fileHash, uploadUrl)
+  // 等待所有切片上传完成
+  const allResult = await Promise.all(uploadRequestList);
+  
+  // 判断是否有切片上传失败，如果上传失败，则尝试重新上传一次
+  if (allResult.some(item => item.code !== 200)) {
+    // 这里不确定错误的会不会返回错误码，所以这里判断正确的
+    const indexList = allResult.map((item, index) => {
+      if (item.code === 200) {
+        return index
+      }
+    })
+    // 获取再次上传的切片列表
+    const againUploadList = chunksToUpload.map(item => !indexList.indexOf(item.index))
+    // 创建上传请求
+    const againUploadRequestList = requestMap(againUploadList, file.name, file.fileHash, uploadUrl)
+    const againAllResult = await Promise.all(againUploadRequestList);
+    if (againAllResult.some(item => item.code !== 200)) {
+      self.postMessage({
+        type: 'error',
+        message: '上传失败，请检查网络连接或联系开发人员'
+      })
+      return
+    }
+  }
+  // 如果全部完成，则准备合并文件
+  const mergeRes = await mergeFile(file, mergeFileUrl, fileDate)
+  if (mergeRes.code === 200) {
+    self.postMessage({
+      type: 'success',
+      message: '文件完成上传',
+      data: mergeRes.data
+    })
+  } else {
+    self.postMessage({
+      type: 'error',
+      message: '文件合并失败'
+    })
+  }
+}
+
+/**
+ * 发送请求
+ * @param url 请求地址
+ * @param data 请求数据
+ * @param method 请求方法
+ * @param headers 请求头
+ * @returns {Promise<unknown>}
+ */
+function request(url, data, method = 'POST', headers = {'Content-Type': 'application/json'}) {
+  return new Promise((resolve, reject) => {
+    fetch(url, {
+      method: method,
+      headers: headers,
+      body: JSON.stringify(data)
+    }).then(res => res.json())
+        .then(response => {
+          resolve(response)
+        })
+        .catch(err => {
+          reject(err)
+        })
+  })
+}
+
+/**
+ * 请求映射
+ * @param chunksList
+ * @param fileName
+ * @param fileHash
+ * @param uploadUrl
+ * @returns {*}
+ */
+function requestMap(chunksList, fileName, fileHash, uploadUrl) {
+  return chunksList.map(chunk => {
+    const formData = new FormData();
+    formData.append('fileName', fileName);     // 文件名
+    formData.append('chunkIndex', chunk.index);  // 当前切片的索引
+    formData.append('chunkHash', chunk.fileHash);  // 当前切片的哈希值
+    formData.append('fileHash', fileHash);     // 文件哈希值
+    formData.append('file', chunk.chunk);    // 切片文件 (如果请求的node，记得放最后)
+    return fetch(uploadUrl, {
+      method: 'POST',
+      body: formData // 使用 FormData 上传文件
+    })
+        .then(res => res.json())
+        .then(response => {
+          self.postMessage({
+            type: 'uploadProgress',
+            message: '切片上传成功',
+            data: {
+              chunkIndex: response.data.chunkIndex,
+              chunkHash: response.data.fileHash
+            }
+          })
+          return response
+        }).catch(err => {
+          return err
+        });
+  })
+}
+
+/**
+ * 合并文件请求
+ * @param file
+ * @param mergeFileUrl
+ * @param fileDate
+ * @returns {Promise<unknown>}
+ */
+function mergeFile(file, mergeFileUrl, fileDate) {
+  return new Promise((resolve, reject) => {
+    fetch(mergeFileUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fileName: file.name,      // 文件名称
+        fileHash: file.fileHash,     // 文件哈希值
+        totalChunks: file.chunkNum,   // 切片总数
+        chunk: file.chunks.map(item => {  // 切片哈希数组
+          return {fileHash: item.fileHash, index: item.index}
+        }),
+        ...fileDate
+      })
+    }).then(res => res.json())
+        .then(response => {
+          console.log(response)
+          resolve(response)
+        })
+        .catch(err => {
+          reject(err)
+        })
+  })
+}
+
+```
+
+## 其他交互
+
+```ts
+
+/**
+ * 移除文件
+ * @param _        被移除的文件
+ * @param fileList  移除后的列表
+ */
+function uploadRemove(_: UploadUserFile, fileList: UploadUserFile[]) {
+  uploadFileValue.value = fileList
+  // 如果在上传过程中，移除了文件，则终止线程
+  if (worker) {
+    worker!.postMessage({type: 'terminate', file: ''});
+    fileValue.value = null
+  }
+}
+
+/**
+ * 更新上传进度
+ * @param data
+ */
+function updateUploadProgress(data: any) {
+  if (fileValue.value && uploadFileValue.value.length > 0) {
+    fileValue.value.uploadedIndexList.push(data.data.chunkIndex)
+    // 简单的使用切片数量计算上传进度，也可以用文件大小计算进度
+    fileValue.value.progress = Number(((fileValue.value.uploadedIndexList.length / fileValue.value.chunkNum) * 100).toFixed(1))
+    // 修改上传组件的进度展示
+    uploadFileValue.value[0].percentage = fileValue.value.progress
+  }
+}
+
+/**
+ * 预览文件，直接点击下载文件
+ */
+function uploadPreview() {
+  if (fileValue.value) {
+    if (fileValue.value.status === 'success') {
+      // 简简单单一个文件下载
+      dowLoadFile({}, downloadFileUrl + fileValue.value.pathUrl, fileValue.value.name)
+    } else {
+      showWarn('请等待文件上传完成')
+    }
+  }
+}
+
+```
+
+`packageUtils.ts` 中的文件下载
+
+```ts
+
+/**
+ * blob 文件流的方式下载文件
+ * @param {string} url    下载文件的路径
+ * @param {object} data    下载文件需要的参数
+ * @param fileName         文件名称
+ * @param method           请求方式
+ * @param headers         文件下载时的请求头
+ */
+export async function dowLoadFile(data: any, url: string, fileName: string, method: string = 'GET', headers?: {
+  key: string,
+  value: string
+}) {
+  const xhr = new XMLHttpRequest()
+  xhr.open(method, url, true)
+  xhr.setRequestHeader('Content-Type', 'application/json')
+  if (headers) {
+    Object.entries(headers).forEach(([key, value]) => {
+      xhr.setRequestHeader(key, value)
+    })
+  }
+  xhr.responseType = 'blob'
+  xhr.onload = () => {
+    const blob = xhr.response
+    // const blobUrl = URL.createObjectURL(blob)
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = fileName
+    a.style.display = 'none'
+    a.click()
+  }
+  xhr.send(JSON.stringify(data))
+}
+
+```
+
+## 使用组件
+
+```vue
+
+<script setup lang="ts">
+  import UploadSharding from './uploadSharding/uploadSharding.vue';
+  import {ref, watchEffect} from 'vue';
+
+  const fileList = ref([])
+
+  watchEffect(() => {
+    console.log(fileList.value)
+  })
+</script>
+
+<template>
+  <div>
+    <upload-sharding
+        v-model="fileList"
+        test-hash-url="http://localhost:3000/upload/status"
+        upload-url="http://localhost:3000/upload/chunk"
+        merge-file-url="http://localhost:3000/upload/merge"
+        download-file-url="http://localhost:3000"
+    >
+    </upload-sharding>
+  </div>
+</template>
+
+<style scoped>
+</style>
+```
+
+## 效果
+
+![An image](/image/web/chunkUpload-audio.gif)
