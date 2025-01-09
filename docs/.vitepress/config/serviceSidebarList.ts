@@ -4,6 +4,12 @@ export const serviceSidebarList = {
       text: 'node',
       collapsed: false,
       link: '/service/node/index'
+    }, {
+      text: 'express',
+      collapsed: false,
+      items: [
+        {text: '大文件切片上传', link: '/service/node/express/uploadLargeFiles'}
+      ]
     }
   ],
   'rust': [

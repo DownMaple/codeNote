@@ -1,10 +1,10 @@
 祖传开篇：本文简单介绍 怎么使用 elementPlus 上传组件 和 web worker 实现大文件切片上传。
 
-完整代码请前往 [gitHub仓库]()。
+完整代码请前往 [gitHub仓库](https://github.com/DownMaple/maple-com/tree/master/src/uploadSharding)。
 
-对应的 Node Express 服务端文章请前往：[node]()， 完整代码请前往：[node GitHub仓库]()。
+对应的 Node Express 服务端文章请前往：[node](../../../service/node/express/uploadLargeFiles)， 完整代码请前往：[node GitHub仓库](https://github.com/DownMaple/express-upload-file)。
 
-对应的 java SpringBoot 服务端文章请前往：[java]()，完整代码请前往：[java GitHub仓库]()。
+对应的 java SpringBoot 暂未开发，请稍后。。。。~~服务端文章请前往：[java]()，完整代码请前往：[java GitHub仓库]()。~~
 
 作者水平有限，可能比较简陋，也或许有些错误，欢迎指正。
 
