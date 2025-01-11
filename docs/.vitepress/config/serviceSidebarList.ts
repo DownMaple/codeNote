@@ -50,7 +50,7 @@ export const serviceSidebarList = {
       text: 'SpringBoot',
       collapsed: false,
       items: [
-        {text: '大文件切片上传', link: '/service/java/SpringBoot/ideaLombokFail'}
+        {text: '大文件切片上传', link: '/service/java/SpringBoot/uploadLargeFiles'}
       ]
     },
     {
