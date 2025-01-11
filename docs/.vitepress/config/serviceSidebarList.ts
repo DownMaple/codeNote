@@ -40,6 +40,27 @@ export const serviceSidebarList = {
       ]
     }
   ],
+  'java': [
+    {
+      text: 'java',
+      collapsed: false,
+      link: '/service/java/index'
+    },
+    {
+      text: 'SpringBoot',
+      collapsed: false,
+      items: [
+        {text: '大文件切片上传', link: '/service/java/SpringBoot/ideaLombokFail'}
+      ]
+    },
+    {
+      text: '其他',
+      collapsed: false,
+      items: [
+        {text: 'Lombok使用后构建错误', link: '/service/java/other/ideaLombokFail'}
+      ]
+    }
+  ],
   'database': [
     {
       text: '数据库相关',

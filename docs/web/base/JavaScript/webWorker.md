@@ -38,7 +38,7 @@ const worker = new Worker(new URL('./generateFile.worker.js', import.meta.url));
 
 * **import.meta.url：**  是 ES 模块（ESM）中的一个内置对象，它返回当前模块的 URL，通常是当前文件在浏览器或 Node.js 环境中的位置
     * 在浏览器环境中，它会返回当前模块的绝对
-      URL（比如 http://localhost:5173/src/uploadSharding/uploadSharding.vue?t=1736324013520 ）
+      URL（比如 `h ttp://localhost:5173/src/uploadSharding/uploadSharding.vue?t=1736324013520` ）
     * 在 Node.js 环境中，它会返回当前模块的文件路径（比如 file:///path/to/your/module.js）
 * **new URL()：**   是 JavaScript 中的一个内置函数，用于创建一个 URL 对象，该对象封装了 URL
   的各个部分，包括协议、主机名、端口号、路径、查询字符串和哈希值等。

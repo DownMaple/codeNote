@@ -12,6 +12,7 @@ export const navList = [
 		items: [
 			{ text: 'node', link: '/service/node', activeMatch: '/service/node/' },
 			{ text: 'rust', link: '/service/rust', activeMatch: '/service/rust/' },
+			{ text: 'java', link: '/service/java', activeMatch: '/service/java/' },
 			{ text: 'database', link: '/service/database', activeMatch: '/service/database/' },
 		],
 		activeMatch: '/service/'
