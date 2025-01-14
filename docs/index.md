@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: maple的技术笔记
-  text: 想到什么就写点什么
+  text: 编程如浩瀚星河，只求记载一星半点
   tagline: js、vue、rust、node、sql
   image:
     src: /logo.jpg

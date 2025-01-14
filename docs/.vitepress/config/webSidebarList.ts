@@ -18,7 +18,8 @@ export const webSidebarList = {
       items: [
         {text: '事件循环（消息循环）', link: '/web/base/JavaScript/messageLoop'},
         {text: 'web Worker', link: '/web/base/JavaScript/webWorker'},
-        {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'}
+        {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'},
+        {text: 'Web Component', link: '/web/base/JavaScript/webComponent'}
       ]
     }
   ],
