@@ -20,7 +20,7 @@ export const webSidebarList = {
         {text: 'web Worker', link: '/web/base/JavaScript/webWorker'},
         {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'},
         {text: 'Web Component', link: '/web/base/JavaScript/webComponent'},
-        {text: 'WebAssembly', link: '/web/base/JavaScript/WebAssembly'}
+        {text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly'}
       ]
     }
   ],
