@@ -38,10 +38,11 @@ export const webSidebarList = {
       ]
     },
     {
-      text: 'vue组件编写',
+      text: 'vue组件',
       collapsed: false,
       items: [
-        {text: '大文件上传组件', link: '/web/vue/components/chunkUpload'}
+        {text: '大文件上传组件', link: '/web/vue/components/chunkUpload'},
+        {text: 'loading组件及用法', link: '/web/vue/components/loading'}
       ]
     }
   ]
