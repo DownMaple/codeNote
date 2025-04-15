@@ -43,7 +43,8 @@ export const webSidebarList = {
       collapsed: false,
       items: [
         {text: '大文件上传组件', link: '/web/vue/components/chunkUpload'},
-        {text: 'loading组件及用法', link: '/web/vue/components/loading'}
+        {text: 'loading组件及用法', link: '/web/vue/components/loading'},
+        {text: '内容内容查看组件', link: '/web/vue/components/dragAssembly'}
       ]
     }
   ]
