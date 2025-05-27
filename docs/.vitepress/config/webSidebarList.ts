@@ -21,7 +21,8 @@ export const webSidebarList = {
         {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'},
         {text: 'Web Component', link: '/web/base/JavaScript/webComponent'},
         {text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly'},
-        {text: 'AbortController', link: '/web/base/JavaScript/abortController'}
+        {text: 'AbortController', link: '/web/base/JavaScript/abortController'},
+        {text: 'ES2025草案', link: '/web/base/JavaScript/es2025'}
       ]
     }
   ],
