@@ -6,11 +6,17 @@ export const otherSidebarList = {
             link: '/other/engineering/index'
         },
         {
-            text: '构建工具相关',
+            text: 'VoidZero',
             collapsed: false,
             items: [
-                {text: 'vite插件开发', link: '/other/engineering/buildTools/vitePlugins'},
+                {text: 'OxLint的基本用法', link: '/other/engineering/voidZero/OxLint'},
+                {text: 'vite插件开发', link: '/other/engineering/voidZero/vitePlugins'},
             ]
+        },
+        {
+            text: '其他构建工具',
+            collapsed: false,
+            items: []
         },
         {
             text: '包管理工具相关',

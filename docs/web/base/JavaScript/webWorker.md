@@ -111,7 +111,12 @@ importScripts('/cache-utils.js');
 
 * 不能直接操作 DOM
 * 不能访问 window、document 对象
-* 不能使用 setTimeout() 和 setInterval()，需要使用 Worker 的专用定时器 API
+* navigator（部分属性可用） location（部分属性可用） localStorage 和 sessionStorage 则不能使用
+* Web Worker 只能通过相对路径或绝对路径加载脚本文件，且必须遵循同源策略（Same-Origin Policy）
+* Web Worker 与主线程之间的通信只能通过 postMessage 和 onmessage 实现，无法直接共享变量或对象。
+* 不支持同步 API
+* Web Worker 与主线程之间无法直接共享内存，传递数据时会进行深拷贝（结构化克隆算法）。
+* Web Worker 中的错误不会自动传播到主线程，需要手动监听和处理。
 
 ## 示例代码
 

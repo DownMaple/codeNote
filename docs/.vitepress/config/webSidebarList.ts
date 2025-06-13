@@ -31,6 +31,13 @@ export const webSidebarList = {
       link: '/web/vue/index'
     },
     {
+      text: 'vue的其他姿势',
+      collapsed: false,
+      items: [
+        {text: 'vue中的tsx', link: '/web/vue/posture/useTsx'}
+      ]
+    },
+    {
       text: 'vue版本更新',
       collapsed: false,
       items: [
