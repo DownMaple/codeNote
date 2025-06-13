@@ -20,7 +20,9 @@ export const webSidebarList = {
         {text: 'web Worker', link: '/web/base/JavaScript/webWorker'},
         {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'},
         {text: 'Web Component', link: '/web/base/JavaScript/webComponent'},
-        {text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly'}
+        {text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly'},
+        {text: 'AbortController', link: '/web/base/JavaScript/abortController'},
+        {text: 'ES2025草案', link: '/web/base/JavaScript/es2025'}
       ]
     }
   ],
@@ -49,7 +51,8 @@ export const webSidebarList = {
       collapsed: false,
       items: [
         {text: '大文件上传组件', link: '/web/vue/components/chunkUpload'},
-        {text: 'loading组件及用法', link: '/web/vue/components/loading'}
+        {text: 'loading组件及用法', link: '/web/vue/components/loading'},
+        {text: '内容内容查看组件', link: '/web/vue/components/dragAssembly'}
       ]
     }
   ]
