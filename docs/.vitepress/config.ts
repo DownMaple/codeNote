@@ -24,6 +24,7 @@ export default {
     sidebar: {
       '/web/base/': webSidebarList.base,
       '/web/vue/': webSidebarList.vue,
+      '/web/android/': webSidebarList.android,
       '/service/node/': serviceSidebarList.node,
       '/service/rust/': serviceSidebarList.rust,
       '/service/java/': serviceSidebarList.java,

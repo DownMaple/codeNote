@@ -4,6 +4,7 @@ export const navList = [
 		items: [
 			{ text: '基础', link: '/web/base', activeMatch: '/web/base/' },
 			{ text: 'vue', link: '/web/vue', activeMatch: '/web/vue/' },
+			{ text: 'Android', link: '/web/android', activeMatch: '/web/android/' },
 		],
 		activeMatch: '/web/'
 	},

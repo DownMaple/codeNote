@@ -55,5 +55,19 @@ export const webSidebarList = {
         {text: '内容内容查看组件', link: '/web/vue/components/dragAssembly'}
       ]
     }
+  ],
+  'android': [
+    {
+      text: 'android',
+      collapsed: false,
+      link: '/web/android/index'
+    },
+    {
+      text: 'android组件',
+      collapsed: false,
+      items: [
+        {text: '敏感数据查看组件', link: '/web/android/components/SensitiveDataView'}
+      ]
+    }
   ]
 }
