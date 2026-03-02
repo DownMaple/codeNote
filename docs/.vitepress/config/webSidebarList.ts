@@ -9,20 +9,20 @@ export const webSidebarList = {
       text: '浏览器相关',
       collapsed: false,
       items: [
-        {text: 'url到页面展示的全过程', link: '/web/base/Browser/urlToPage'}
+        { text: 'url到页面展示的全过程', link: '/web/base/Browser/urlToPage' }
       ]
     },
     {
       text: 'JavaScript',
       collapsed: false,
       items: [
-        {text: '事件循环（消息循环）', link: '/web/base/JavaScript/messageLoop'},
-        {text: 'web Worker', link: '/web/base/JavaScript/webWorker'},
-        {text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker'},
-        {text: 'Web Component', link: '/web/base/JavaScript/webComponent'},
-        {text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly'},
-        {text: 'AbortController', link: '/web/base/JavaScript/abortController'},
-        {text: 'ES2025草案', link: '/web/base/JavaScript/es2025'}
+        { text: '事件循环（消息循环）', link: '/web/base/JavaScript/messageLoop' },
+        { text: 'web Worker', link: '/web/base/JavaScript/webWorker' },
+        { text: 'Service Worker', link: '/web/base/JavaScript/serviceWorker' },
+        { text: 'Web Component', link: '/web/base/JavaScript/webComponent' },
+        { text: 'WebAssembly', link: '/web/base/JavaScript/webAssembly' },
+        { text: 'AbortController', link: '/web/base/JavaScript/abortController' },
+        { text: 'ES2025草案', link: '/web/base/JavaScript/es2025' }
       ]
     }
   ],
@@ -36,23 +36,24 @@ export const webSidebarList = {
       text: 'vue的其他姿势',
       collapsed: false,
       items: [
-        {text: 'vue中的tsx', link: '/web/vue/posture/useTsx'}
+        { text: 'vue中的tsx', link: '/web/vue/posture/useTsx' }
       ]
     },
     {
       text: 'vue版本更新',
       collapsed: false,
       items: [
-        {text: '3.5更新', link: '/web/vue/version/version3.5'}
+        { text: '3.5更新', link: '/web/vue/version/version3.5' }
       ]
     },
     {
       text: 'vue组件',
       collapsed: false,
       items: [
-        {text: '大文件上传组件', link: '/web/vue/components/chunkUpload'},
-        {text: 'loading组件及用法', link: '/web/vue/components/loading'},
-        {text: '内容内容查看组件', link: '/web/vue/components/dragAssembly'}
+        { text: '大文件上传组件', link: '/web/vue/components/chunkUpload' },
+        { text: 'loading组件及用法', link: '/web/vue/components/loading' },
+        { text: '内容查看组件', link: '/web/vue/components/dragAssembly' },
+        { text: '图片标注与夹角计算组件', link: '/web/vue/components/shadowAnnotation' }
       ]
     }
   ],
@@ -66,7 +67,7 @@ export const webSidebarList = {
       text: 'android组件',
       collapsed: false,
       items: [
-        {text: '敏感数据查看组件', link: '/web/android/components/SensitiveDataView'}
+        { text: '敏感数据查看组件', link: '/web/android/components/sensitiveDataView' }
       ]
     }
   ]
